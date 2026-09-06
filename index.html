@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Zhetigen — Dástuir Úni</title>
+  <title>Zhetigen — Daistuir Uini</title>
   <style>
     * {
       box-sizing: border-box;
@@ -192,7 +192,7 @@
 
   <header>
     <h1>ZHETIGEN</h1>
-    <p class="sub" id="statusText">Ishekterdi saýsaqpen syzyp shertińiz</p>
+    <p class="sub" id="statusText">Ishekterdi sauusaqpen syzyp shertigniz</p>
   </header>
 
   <div class="instrument-container">
@@ -200,25 +200,25 @@
   </div>
 
   <div class="controls">
-    <button class="btn gold" id="playKuiBtn">▶ Kúıdi tyńdaý</button>
-    <button class="btn" id="strumBtn">Qaǵys (Arpejio)</button>
-    <button class="btn" id="chordBtn">Akkord</button>
+    <button class="btn gold" id="playKuiBtn">▶ Kuijdi tygndauu</button>
+    <button class="btn" id="strumBtn">Qaghys</button>
+    <button class="btn" id="chordBtn">Bir mezgilde</button>
   </div>
 
   <div class="history-card">
-    <h3>Zhetigenniń qasıeti men 7 asyq</h3>
+    <h3>Zhetigennign qasjeti men 7 asyq</h3>
     <p>
-      Aspaptaǵy ár asyq — qunty tıek. Dástúirde asyqty ońǵa-solǵa nemese joǵary-tómen jylystyp, ishektiń uzyndyǵyn teńshegen. Asyq joǵarylaǵan saıyn dybys jińishkerip (ashyq), tómen túsken saıyn qońyrlana túsken.
+      Aspaptaghy air asyq — qunty tjek. Daistuirde asyqty ogngha-solgha nemese zhoghary-tuoimen zhylystyp, ishektign uzyndyghyn tegnshegen. Asyq zhogharylaghan sajyn dybys zhignishkerip (ashyq), tuoimen tuisken sajyn qognyrlana tuisken.
     </p>
-    <div style="font-weight: bold; color: #dfb15b; margin-top: 14px;">7 uldyń zhyry (7 ishek):</div>
+    <div style="font-weight: bold; color: #dfb15b; margin-top: 14px;">7 uldygn zhyry (7 ishek):</div>
     <ol class="strings-list">
-      <li><b>1-ishek:</b> Qaniia — «Talıqsygan aqbulaq»</li>
-      <li><b>2-ishek:</b> Tolyqbaı — «Kúıik bala»</li>
-      <li><b>3-ishek:</b> Jaılaý — «Qara joryq»</li>
-      <li><b>4-ishek:</b> Qarmaqshy — «Bala búrkiti»</li>
+      <li><b>1-ishek:</b> Qanja — «Talyqsygan aqbulaq»</li>
+      <li><b>2-ishek:</b> Tolyqbaj — «Kuijik bala»</li>
+      <li><b>3-ishek:</b> Zhajlauu — «Qara zhoryq»</li>
+      <li><b>4-ishek:</b> Qarmaqshy — «Bala buirkiti»</li>
       <li><b>5-ishek:</b> Qadyr — «Sholaq baqbaq»</li>
-      <li><b>6-ishek:</b> Sátpaı — «Qos kókirek»</li>
-      <li><b>7-ishek:</b> Jańqa — «Qurǵaq aǵash»</li>
+      <li><b>6-ishek:</b> Saitpaj — «Qos kuoikirek»</li>
+      <li><b>7-ishek:</b> Jagnqa — «Qurghaq aghash»</li>
     </ol>
   </div>
 
@@ -409,8 +409,8 @@
       kuiTimeouts.forEach(t => clearTimeout(t));
       kuiTimeouts = [];
       isPlayingKui = false;
-      document.getElementById('playKuiBtn').innerText = '▶ Kúıdi tyńdaý';
-      document.getElementById('statusText').innerText = 'Ishekterdi saýsaqpen syzyp shertińiz';
+      document.getElementById('playKuiBtn').innerText = '▶ Kuijdi tygndauu';
+      document.getElementById('statusText').innerText = 'Ishekterdi sauusaqpen syzyp shertigniz';
     }
 
     function playKui() {
@@ -421,8 +421,8 @@
 
       initAudio();
       isPlayingKui = true;
-      document.getElementById('playKuiBtn').innerText = '⏹ Toqtatý';
-      document.getElementById('statusText').innerText = 'Kúı oryndalýda...';
+      document.getElementById('playKuiBtn').innerText = '⏹ Toqtatuu';
+      document.getElementById('statusText').innerText = 'Kuij oryndaluuda...';
 
       let cumulative = 0;
       kuiMelody.forEach((step, index) => {
