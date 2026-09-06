@@ -18,17 +18,17 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      touch-action: none; /* Telefonda ekrannyń yǵysyp ketpeui úshin */
+      touch-action: none;
     }
     h2 {
       letter-spacing: 2px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-weight: 500;
     }
     p {
       color: #8c7662;
       font-size: 14px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     .instrument {
       display: flex;
@@ -47,14 +47,13 @@
       cursor: pointer;
     }
     .string {
-      width: 20px;
+      width: 22px;
       height: 280px;
       position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
     }
-    /* Ishektiń ózi */
     .string::before {
       content: '';
       position: absolute;
@@ -65,7 +64,6 @@
       box-shadow: 0 0 4px rgba(0,0,0,0.6);
       transition: transform 0.05s ease, box-shadow 0.05s ease;
     }
-    /* Asyqty beıneleıtin tıek */
     .bridge {
       width: 14px;
       height: 10px;
@@ -82,21 +80,44 @@
       color: #dfb15b;
     }
     .string-wrap.active .string::before {
-      transform: scaleX(2.2);
-      box-shadow: 0 0 12px #ffe699;
+      transform: scaleX(2.4);
+      box-shadow: 0 0 14px #ffe699;
       background: #fff3c4;
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .btn {
+      background: #24140c;
+      color: #dfb15b;
+      border: 1px solid #5a3a22;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn:active {
+      background: #3d2315;
+      transform: scale(0.96);
     }
   </style>
 </head>
 <body>
 
   <h2>ZHETIGEN</h2>
-  <p>Ishekterdi saýsaqpen shertińiz</p>
+  <p>Ishekterdi jeke shertińiz nemese qaǵysty basyńyz</p>
 
   <div class="instrument" id="zhetigen"></div>
 
+  <div class="controls">
+    <button class="btn" id="strumBtn">Qaǵys (Arpejio)</button>
+    <button class="btn" id="chordBtn">Bir mezgilde (Akkord)</button>
+  </div>
+
   <script>
-    // Dástuirli 7 ishek buıy (Pentatonıka)
     const freqs = [
       { num: 1, note: 'D4', f: 293.66 },
       { num: 2, note: 'E4', f: 329.63 },
@@ -122,35 +143,31 @@
     function playZhetigenString(freq) {
       const ctx = getAudioContext();
       const sampleRate = ctx.sampleRate;
-      const duration = 2.8; // Ishektiń terbelis uzaqtyǵy
+      const duration = 2.8;
       const totalSamples = Math.floor(sampleRate * duration);
       const period = Math.round(sampleRate / freq);
 
       const buffer = ctx.createBuffer(1, totalSamples, sampleRate);
       const data = buffer.getChannelData(0);
 
-      // 1. Shertu sátindegi jumsaq impulıs (asyq pen ishek soqqysy)
       let lastVal = 0;
       for (let i = 0; i < period; i++) {
         const whiteNoise = Math.random() * 2 - 1;
-        lastVal = (lastVal + whiteNoise) * 0.5; // Jumsaq qonyr bastama
+        lastVal = (lastVal + whiteNoise) * 0.5;
         data[i] = lastVal * 0.8;
       }
 
-      // 2. Karplus-Strong algorıtmi (Massıv qateligi túzetildi)
       const damping = 0.992;
       for (let i = period; i < totalSamples; i++) {
-        // data[i - period + 1] qoldanylǵandyqtan, teris ındekske ketpeıdi
         data[i] = ((data[i - period] + data[i - period + 1]) * 0.5) * damping;
       }
 
       const source = ctx.createBufferSource();
       source.buffer = buffer;
 
-      // 3. Aǵash shanaqtyń qonyr rezonansyn beretin túpnusqa súzgi
       const bodyFilter = ctx.createBiquadFilter();
       bodyFilter.type = 'lowpass';
-      bodyFilter.frequency.value = 2400; // Ashshy metall úndi ketirip, aǵash úni jasaıdy
+      bodyFilter.frequency.value = 2400;
       bodyFilter.Q.value = 1.0;
 
       source.connect(bodyFilter);
@@ -159,8 +176,9 @@
     }
 
     const container = document.getElementById('zhetigen');
+    const wrapElements = [];
 
-    freqs.forEach((item) => {
+    freqs.forEach((item, index) => {
       const wrap = document.createElement('div');
       wrap.className = 'string-wrap';
 
@@ -184,9 +202,31 @@
       });
 
       container.appendChild(wrap);
+      wrapElements.push(wrap);
     });
 
-    // Brauzer buǵatyn birden ashý
+    // Barlyq ishekti keshiktirumen nemese birden qaǵu fýnktsııasy
+    function strumAllStrings(delayMs) {
+      freqs.forEach((item, idx) => {
+        setTimeout(() => {
+          playZhetigenString(item.f);
+          wrapElements[idx].classList.add('active');
+          setTimeout(() => wrapElements[idx].classList.remove('active'), 150);
+        }, idx * delayMs);
+      });
+    }
+
+    // Qaǵys: ár ishekke 45 ms aralyqpen (naǵyz zhetigenge tán arpejio)
+    document.getElementById('strumBtn').addEventListener('click', () => {
+      strumAllStrings(45);
+    });
+
+    // Akkord: barlyq ishekti dál bir mezgilde (0 ms) shertu
+    document.getElementById('chordBtn').addEventListener('click', () => {
+      strumAllStrings(0);
+    });
+
+    // Brauzer ruqsaty
     window.addEventListener('pointerdown', () => {
       getAudioContext();
     }, { once: true });
