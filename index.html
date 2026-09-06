@@ -3,408 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Жетіген | Ұлттық акустикалық аспап</title>
+  <title>Zhetigen Úni</title>
   <style>
-    :root {
-      --bg-surface: #0e0906;
-      --wood-dark: #221208;
-      --wood-mid: #381f12;
-      --gold: #d4af37;
-      --gold-glow: rgba(212, 175, 55, 0.4);
-      --bone: #f7f3e8;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
     body {
-      background-color: var(--bg-surface);
-      color: #ede4dc;
+      margin: 0;
+      background: #111;
+      color: #e5c158;
+      font-family: sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      padding: 30px 16px;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .brand {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--gold);
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      text-shadow: 0 3px 15px var(--gold-glow);
-    }
-
-    .tagline {
-      font-size: 0.9rem;
-      color: #a59385;
-      margin-top: 6px;
-    }
-
-    .instrument-body {
-      width: 100%;
-      max-width: 900px;
-      height: 380px;
-      background: radial-gradient(ellipse at center, var(--wood-mid) 0%, var(--wood-dark) 100%);
-      border: 6px solid #4a2817;
-      border-radius: 24px;
-      box-shadow: 0 30px 70px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,0.8);
-      position: relative;
-      padding: 30px 40px;
-      touch-action: none;
-    }
-
-    .sound-hole {
-      position: absolute;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #090503;
-      border: 2px solid rgba(212,175,55,0.3);
-      box-shadow: inset 0 3px 10px rgba(0,0,0,0.9);
-    }
-    .sound-hole.tl { top: 24px; left: 24px; }
-    .sound-hole.br { bottom: 24px; right: 24px; }
-
-    .strings-stage {
-      position: relative;
-      width: 100%;
-      height: 270px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .string-track {
-      position: relative;
-      flex: 1;
-      height: 100%;
-      display: flex;
       justify-content: center;
-      cursor: pointer;
+      height: 100vh;
     }
-
-    .string-wire {
-      width: 2px;
-      height: 100%;
-      background: linear-gradient(90deg, #8a785d, #fff0d4, #5c4e3a);
-      box-shadow: 0 0 3px rgba(255,240,212,0.3);
-      pointer-events: none;
-      transform-origin: center;
-    }
-
-    /* Тербеліс анимациясы */
-    @keyframes stringVibrate {
-      0% { transform: scaleX(1); }
-      25% { transform: scaleX(3.5) translateX(1px); }
-      50% { transform: scaleX(1); }
-      75% { transform: scaleX(3.5) translateX(-1px); }
-      100% { transform: scaleX(1); }
-    }
-
-    .string-track.vibrating .string-wire {
-      animation: stringVibrate 0.08s linear infinite;
-      box-shadow: 0 0 10px var(--gold);
-      background: #ffffff;
-    }
-
-    .asyq-bridge {
-      position: absolute;
-      width: 22px;
-      height: 36px;
-      background: linear-gradient(135deg, #ffffff 0%, #cfc0ad 100%);
-      border-radius: 6px;
-      left: 50%;
-      transform: translate(-50%, 50%);
-      cursor: ns-resize;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.8), inset 0 1px 1px #fff;
-      z-index: 10;
-      touch-action: none;
-    }
-
-    .note-info {
-      position: absolute;
-      bottom: -32px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--gold);
-      pointer-events: none;
-      white-space: nowrap;
-      text-align: center;
-    }
-
-    .panel-controls {
-      margin-top: 30px;
+    .instrument {
       display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
+      gap: 18px;
+      padding: 30px;
+      background: #1a120b;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
-
-    .action-btn {
-      background: #24140b;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      padding: 10px 20px;
-      border-radius: 8px;
+    .string {
+      width: 28px;
+      height: 280px;
+      background: linear-gradient(90deg, #444, #d4af37, #444);
+      border-radius: 4px;
       cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      transition: all 0.2s ease;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 12px;
+      font-weight: bold;
+      transition: transform 0.05s ease, box-shadow 0.05s ease;
+      user-select: none;
     }
-
-    .action-btn:hover {
-      background: var(--gold);
-      color: #120904;
+    .string:active, .string.active {
+      transform: scaleX(1.3);
+      box-shadow: 0 0 15px #ffd700;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="brand">Жетіген</div>
-    <div class="tagline">Ағаш шанақты акустикалық синтез және жылжымалы асықтар</div>
-  </header>
-
-  <div class="instrument-body">
-    <div class="sound-hole tl"></div>
-    <div class="sound-hole br"></div>
-
-    <div class="strings-stage" id="stringsArea"></div>
-  </div>
-
-  <div class="panel-controls">
-    <button class="action-btn" id="tunePentatonic">Пентатоника (Дәстүрлі)</button>
-    <button class="action-btn" id="tuneDiatonic">Диатоника</button>
-  </div>
+  <h2>Zhetigen úni</h2>
+  <div class="instrument" id="zhetigen"></div>
 
   <script>
-    class AcousticZhetigenAudio {
-      constructor() {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        this.ctx = new AudioCtx();
-
-        // 1. Ағаш шанақ резонансы (Acoustic Body Resonator)
-        this.bodyLow = this.ctx.createBiquadFilter();
-        this.bodyLow.type = 'peaking';
-        this.bodyLow.frequency.value = 210; // Шанақтың негізгі терең үні
-        this.bodyLow.Q.value = 2.0;
-        this.bodyLow.gain.value = 6;
-
-        this.bodyMid = this.ctx.createBiquadFilter();
-        this.bodyMid.type = 'peaking';
-        this.bodyMid.frequency.value = 460; // Ағаштың ортаңғы жиілігі
-        this.bodyMid.Q.value = 1.8;
-        this.bodyMid.gain.value = 4;
-
-        // 2. Металл сықырды кесетін жұмсартқыш сүзгі
-        this.softener = this.ctx.createBiquadFilter();
-        this.softener.type = 'highshelf';
-        this.softener.frequency.value = 3500;
-        this.softener.gain.value = -8;
-
-        this.master = this.ctx.createGain();
-        this.master.gain.value = 1.0;
-
-        // Тізбекті жалғау
-        this.bodyLow.connect(this.bodyMid);
-        this.bodyMid.connect(this.softener);
-        this.softener.connect(this.master);
-        this.master.connect(this.ctx.destination);
-      }
-
-      pluck(freq, velocity = 0.8) {
-        if (this.ctx.state === 'suspended') {
-          this.ctx.resume();
-        }
-
-        const sampleRate = this.ctx.sampleRate;
-        const period = Math.round(sampleRate / freq);
-        
-        // Сықырды жою үшін: кездейсоқ шуды жұмсақ тереземен (windowing) өңдеу
-        const noiseBuffer = this.ctx.createBuffer(1, period, sampleRate);
-        const output = noiseBuffer.getChannelData(0);
-        for (let i = 0; i < period; i++) {
-          // Ханн терезесімен басталған және аяқталған жұмсақ шертпе импульсі
-          const envelope = 0.5 * (1 - Math.cos((2 * Math.PI * i) / period));
-          output[i] = (Math.random() * 2 - 1) * envelope * velocity;
-        }
-
-        const noise = this.ctx.createBufferSource();
-        noise.buffer = noiseBuffer;
-
-        const delay = this.ctx.createDelay(1.0);
-        delay.delayTime.value = 1.0 / freq;
-
-        // Ішек ішіндегі тұншығу сүзгісі (damping filter)
-        const dampFilter = this.ctx.createBiquadFilter();
-        dampFilter.type = 'lowpass';
-        // Жоғары ноталар тым қатты сыңғырламауы үшін шектеу
-        dampFilter.frequency.value = Math.min(freq * 2.2, 3800);
-
-        const feedback = this.ctx.createGain();
-        feedback.gain.value = 0.978; // Тұрақты өшу дәрежесі
-
-        // Ілмек (Loop)
-        noise.connect(delay);
-        delay.connect(dampFilter);
-        dampFilter.connect(feedback);
-        feedback.connect(delay);
-
-        // Жұмсақ өшу конверті
-        const env = this.ctx.createGain();
-        env.gain.setValueAtTime(1.0, this.ctx.currentTime);
-        env.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 3.0);
-
-        dampFilter.connect(env);
-        env.connect(this.bodyLow);
-
-        noise.start();
-
-        // 3 секундтан кейін тораптарды жабу
-        setTimeout(() => {
-          noise.disconnect();
-          delay.disconnect();
-          dampFilter.disconnect();
-          feedback.disconnect();
-          env.disconnect();
-        }, 3000);
-      }
-    }
-
-    const synth = new AcousticZhetigenAudio();
-    const stage = document.getElementById('stringsArea');
-
-    const pentatonicPresets = [
-      { key: "1", note: "C4", baseFreq: 261.63, pos: 0.72 },
-      { key: "2", note: "D4", baseFreq: 293.66, pos: 0.66 },
-      { key: "3", note: "E4", baseFreq: 329.63, pos: 0.60 },
-      { key: "4", note: "G4", baseFreq: 392.00, pos: 0.53 },
-      { key: "5", note: "A4", baseFreq: 440.00, pos: 0.47 },
-      { key: "6", note: "C5", baseFreq: 523.25, pos: 0.40 },
-      { key: "7", note: "D5", baseFreq: 587.33, pos: 0.34 }
+    const freqs = [
+      { note: 'D4', f: 293.66 },
+      { note: 'E4', f: 329.63 },
+      { note: 'G4', f: 392.00 },
+      { note: 'A4', f: 440.00 },
+      { note: 'B4', f: 493.88 },
+      { note: 'D5', f: 587.33 },
+      { note: 'E5', f: 659.25 }
     ];
 
-    const diatonicPresets = [
-      { key: "1", note: "C4", baseFreq: 261.63, pos: 0.75 },
-      { key: "2", note: "D4", baseFreq: 293.66, pos: 0.68 },
-      { key: "3", note: "E4", baseFreq: 329.63, pos: 0.62 },
-      { key: "4", note: "F4", baseFreq: 349.23, pos: 0.56 },
-      { key: "5", note: "G4", baseFreq: 392.00, pos: 0.50 },
-      { key: "6", note: "A4", baseFreq: 440.00, pos: 0.42 },
-      { key: "7", note: "B4", baseFreq: 493.88, pos: 0.35 }
-    ];
+    let audioCtx = null;
 
-    let strings = pentatonicPresets.map(p => ({
-      ...p,
-      freq: p.baseFreq,
-      currentPos: p.pos,
-      track: null,
-      bridge: null,
-      info: null
-    }));
+    function playZhetigenString(freq) {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
 
-    function calcFreq(base, pos) {
-      return base * (0.6 / Math.max(0.18, pos));
+      const sampleRate = audioCtx.sampleRate;
+      const duration = 2.5; // Dybystyń óshu uzaqtyǵy (sekund)
+      const totalSamples = sampleRate * duration;
+      const period = Math.round(sampleRate / freq);
+      
+      const buffer = audioCtx.createBuffer(1, totalSamples, sampleRate);
+      const data = buffer.getChannelData(0);
+
+      // Shertu sátindegi alǵashqy aq shu (ishek soqqysy)
+      for (let i = 0; i < period; i++) {
+        data[i] = (Math.random() * 2 - 1) * 0.8;
+      }
+
+      // Karplus-Strong terbelisi (aǵashtyń dástuirli jolyǵy men óshui)
+      const damping = 0.991; 
+      for (let i = period; i < totalSamples; i++) {
+        data[i] = ((data[i - period] + data[i - period - 1]) * 0.5) * damping;
+      }
+
+      const source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(audioCtx.destination);
+      source.start();
     }
 
-    function triggerPluck(index) {
-      const s = strings[index];
-      synth.pluck(s.freq);
-      s.track.classList.add('vibrating');
-      setTimeout(() => s.track.classList.remove('vibrating'), 400);
-    }
-
-    strings.forEach((s, idx) => {
-      const track = document.createElement('div');
-      track.className = 'string-track';
-
-      const wire = document.createElement('div');
-      wire.className = 'string-wire';
-
-      const bridge = document.createElement('div');
-      bridge.className = 'asyq-bridge';
-      bridge.style.bottom = `${s.pos * 100}%`;
-
-      const info = document.createElement('div');
-      info.className = 'note-info';
-      info.innerText = `${s.key}: ${s.note}`;
-
-      track.appendChild(wire);
-      track.appendChild(bridge);
-      track.appendChild(info);
-      stage.appendChild(track);
-
-      s.track = track;
-      s.bridge = bridge;
-      s.info = info;
-
-      track.addEventListener('pointerdown', (e) => {
-        if (e.target !== bridge) triggerPluck(idx);
-      });
-
-      // Асықты сүйреу логикасы
-      let dragging = false;
-      bridge.addEventListener('pointerdown', (e) => {
-        dragging = true;
-        bridge.setPointerCapture(e.pointerId);
-        e.stopPropagation();
-      });
-
-      bridge.addEventListener('pointermove', (e) => {
-        if (!dragging) return;
-        const rect = track.getBoundingClientRect();
-        let newPos = 1 - ((e.clientY - rect.top) / rect.height);
-        newPos = Math.max(0.18, Math.min(0.82, newPos));
-
-        s.currentPos = newPos;
-        bridge.style.bottom = `${newPos * 100}%`;
-        s.freq = calcFreq(s.baseFreq, newPos);
-        info.innerText = `${s.key}: ${Math.round(s.freq)}Hz`;
-      });
-
-      const stopDrag = (e) => {
-        if (dragging) {
-          dragging = false;
-          try { bridge.releasePointerCapture(e.pointerId); } catch(err) {}
-          triggerPluck(idx);
-        }
+    const container = document.getElementById('zhetigen');
+    freqs.forEach((item, index) => {
+      const el = document.createElement('div');
+      el.className = 'string';
+      el.innerText = index + 1;
+      
+      const trigger = () => {
+        playZhetigenString(item.f);
+        el.classList.add('active');
+        setTimeout(() => el.classList.remove('active'), 120);
       };
-      bridge.addEventListener('pointerup', stopDrag);
-      bridge.addEventListener('pointercancel', stopDrag);
-    });
 
-    // Пернетақта арқылы ойнау
-    window.addEventListener('keydown', (e) => {
-      const idx = strings.findIndex(s => s.key === e.key);
-      if (idx !== -1) triggerPluck(idx);
-    });
-
-    // Бұрауларды ауыстыру
-    function applyPreset(presets) {
-      presets.forEach((p, idx) => {
-        strings[idx].baseFreq = p.baseFreq;
-        strings[idx].freq = p.baseFreq;
-        strings[idx].currentPos = p.pos;
-        strings[idx].bridge.style.bottom = `${p.pos * 100}%`;
-        strings[idx].info.innerText = `${p.key}: ${p.note}`;
+      el.addEventListener('pointerdown', trigger);
+      el.addEventListener('pointerenter', (e) => {
+        if (e.buttons === 1) trigger();
       });
-    }
-
-    document.getElementById('tunePentatonic').addEventListener('click', () => applyPreset(pentatonicPresets));
-    document.getElementById('tuneDiatonic').addEventListener('click', () => applyPreset(diatonicPresets));
+      container.appendChild(el);
+    });
   </script>
 </body>
 </html>
