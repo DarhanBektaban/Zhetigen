@@ -19,7 +19,7 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      touch-action: none; /* Ekrannyń arly-berli yǵysyp ketpeui úshin */
+      touch-action: none;
       overflow: hidden;
       user-select: none;
     }
@@ -56,7 +56,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      pointer-events: none; /* Saýsaqtyń tıyuyn ata-anasyna ótkizu */
+      pointer-events: none;
     }
     .string::before {
       content: '';
@@ -134,19 +134,60 @@
     ];
 
     let audioCtx = null;
+    let convolverNode = null;
+    let dryGainNode = null;
+    let wetGainNode = null;
 
-    function getAudioContext() {
+    // Aǵash shanaqtyń akustıkalyq rezonansyn quraıtyn jańǵyryq býferi
+    function buildImpulseResponse(ctx, duration = 2.2, decay = 2.8) {
+      const rate = ctx.sampleRate;
+      const length = Math.floor(rate * duration);
+      const buffer = ctx.createBuffer(2, length, rate);
+      const left = buffer.getChannelData(0);
+      const right = buffer.getChannelData(1);
+
+      for (let i = 0; i < length; i++) {
+        // Eksponentsıaldy baıaý sönu
+        const n = i / length;
+        const envelope = Math.exp(-n * decay);
+        // Stereo rezonans quraıtyn jaryq pen kóleńke úni
+        left[i] = (Math.random() * 2 - 1) * envelope;
+        right[i] = (Math.random() * 2 - 1) * envelope;
+      }
+      return buffer;
+    }
+
+    function initAudio() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
       if (audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
+
+      if (!convolverNode) {
+        // Jańǵyryqty eseptewishi
+        convolverNode = audioCtx.createConvolver();
+        convolverNode.buffer = buildImpulseResponse(audioCtx);
+
+        // Tikeleı ishek qattylyǵy (Dry)
+        dryGainNode = audioCtx.createGain();
+        dryGainNode.gain.value = 0.85;
+
+        // Aǵash jańǵyryǵynyń úlesi (Wet)
+        wetGainNode = audioCtx.createGain();
+        wetGainNode.gain.value = 0.38;
+
+        // Dybystardy jalǵau
+        dryGainNode.connect(audioCtx.destination);
+        convolverNode.connect(wetGainNode);
+        wetGainNode.connect(audioCtx.destination);
+      }
       return audioCtx;
     }
 
     function playZhetigenString(freq) {
-      const ctx = getAudioContext();
+      const ctx = initAudio();
       const sampleRate = ctx.sampleRate;
       const duration = 2.8;
       const totalSamples = Math.floor(sampleRate * duration);
@@ -155,6 +196,7 @@
       const buffer = ctx.createBuffer(1, totalSamples, sampleRate);
       const data = buffer.getChannelData(0);
 
+      // Shertu sátindegi jumsaq qazaqy soqqy
       let lastVal = 0;
       for (let i = 0; i < period; i++) {
         const whiteNoise = Math.random() * 2 - 1;
@@ -162,6 +204,7 @@
         data[i] = lastVal * 0.8;
       }
 
+      // Karplus-Strong terbelisi
       const damping = 0.992;
       for (let i = period; i < totalSamples; i++) {
         data[i] = ((data[i - period] + data[i - period + 1]) * 0.5) * damping;
@@ -170,20 +213,24 @@
       const source = ctx.createBufferSource();
       source.buffer = buffer;
 
+      // Qonyr aǵash súzgisi
       const bodyFilter = ctx.createBiquadFilter();
       bodyFilter.type = 'lowpass';
-      bodyFilter.frequency.value = 2400;
+      bodyFilter.frequency.value = 2300;
       bodyFilter.Q.value = 1.0;
 
       source.connect(bodyFilter);
-      bodyFilter.connect(ctx.destination);
+
+      // Dybys eki arnaǵa bólinedi: tikeleı dınamıkke jáne jańǵyryq shanaǵyna
+      bodyFilter.connect(dryGainNode);
+      bodyFilter.connect(convolverNode);
+
       source.start();
     }
 
     const container = document.getElementById('zhetigen');
     const wrapElements = [];
 
-    // Ishekterdi jasaý
     freqs.forEach((item) => {
       const wrap = document.createElement('div');
       wrap.className = 'string-wrap';
@@ -207,7 +254,7 @@
       setTimeout(() => wrap.classList.remove('active'), 140);
     }
 
-    // Saýsaqpen nemese tishqanmen syzyp ótý (Swipe / Glissando) mehanızmi
+    // Saýsaqpen syzyp ótý (Swipe / Glissando)
     let isInteracting = false;
     let lastPluckedIndex = -1;
 
@@ -227,7 +274,7 @@
     }
 
     window.addEventListener('pointerdown', (e) => {
-      getAudioContext();
+      initAudio();
       isInteracting = true;
       lastPluckedIndex = -1;
       handlePointerAt(e.clientX, e.clientY);
@@ -248,7 +295,7 @@
       lastPluckedIndex = -1;
     });
 
-    // Avtomatty qaǵys jáne akkord túımeleri
+    // Túımeler
     function strumAllStrings(delayMs) {
       freqs.forEach((item, idx) => {
         setTimeout(() => {
