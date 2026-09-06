@@ -3,254 +3,396 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zhetigen | Kjeli Ulttyq Aspap</title>
+  <title>Zhetigen | Сандық кәсіби аспап</title>
   <style>
     :root {
-      --bg-color: #120e0a;
-      --wood-dark: #2a1810;
-      --wood-light: #523423;
-      --accent-gold: #d4af37;
-      --string-color: #f7e6c4;
-      --text-main: #f0e6df;
-      --text-muted: #a6988f;
+      --bg-surface: #0a0705;
+      --wood-frame: #24140b;
+      --wood-top: #3b2214;
+      --gold-accent: #dfb235;
+      --bone-color: #f4ede1;
+      --string-base: #d2c2a4;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      line-height: 1.6;
-      padding-bottom: 60px;
-    }
-
-    header {
-      padding: 24px 20px;
-      text-align: center;
-      background: linear-gradient(180deg, rgba(42,24,16,0.8) 0%, transparent 100%);
-      border-bottom: 1px solid rgba(212,175,55,0.15);
-    }
-
-    .brand {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: var(--accent-gold);
-      text-transform: uppercase;
-    }
-
-    .tagline {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    /* Interactive Zhetigen */
-    .instrument-card {
-      background: linear-gradient(135deg, var(--wood-dark), var(--wood-light));
-      border-radius: 16px;
-      padding: 30px 20px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
-      border: 1px solid rgba(212,175,55,0.3);
-      margin: 24px 0 40px;
-      text-align: center;
-    }
-
-    .instruction {
-      font-size: 0.9rem;
-      color: var(--accent-gold);
-      margin-bottom: 20px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .strings-container {
-      display: flex;
-      justify-content: space-around;
-      align-items: stretch;
-      height: 260px;
-      background: rgba(10, 7, 5, 0.6);
-      border-radius: 12px;
-      padding: 20px 10px;
-      position: relative;
-    }
-
-    .string-col {
+      background-color: var(--bg-surface);
+      color: #ede4dc;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      flex: 1;
-      cursor: pointer;
-      user-select: none;
-      transition: transform 0.1s ease;
+      min-height: 100vh;
+      padding: 24px 16px;
     }
 
-    .string-col:active {
-      transform: scale(0.98);
+    header {
+      text-align: center;
+      margin-bottom: 20px;
     }
 
-    .string-line {
-      width: 2px;
-      background-color: var(--string-color);
-      height: 100%;
-      box-shadow: 0 0 6px rgba(255,255,255,0.3);
+    .brand {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--gold-accent);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 12px rgba(223,178,53,0.3);
+    }
+
+    .tagline {
+      font-size: 0.9rem;
+      color: #9e8e82;
+      margin-top: 4px;
+    }
+
+    .instrument-body {
+      width: 100%;
+      max-width: 920px;
+      height: 380px;
+      background: linear-gradient(180deg, #2b170c 0%, #150a05 100%);
+      border: 4px solid #482614;
+      border-radius: 20px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.85), inset 0 0 50px rgba(0,0,0,0.7);
       position: relative;
-      transition: background-color 0.1s, box-shadow 0.1s;
+      padding: 30px 40px;
+      touch-action: none;
     }
 
-    .string-col.active .string-line {
-      background-color: var(--accent-gold);
-      box-shadow: 0 0 12px var(--accent-gold);
-    }
-
-    .asyq {
-      width: 18px;
-      height: 24px;
-      background: #e6dfd5;
-      border-radius: 4px;
+    .sound-hole {
       position: absolute;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #080402;
+      border: 2px solid rgba(223,178,53,0.25);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.9);
+    }
+    .sound-hole.tl { top: 20px; left: 24px; }
+    .sound-hole.br { bottom: 20px; right: 24px; }
+
+    .strings-stage {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .string-track {
+      position: relative;
+      flex: 1;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .string-wire {
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(90deg, #9f8c6f, #fff1d8, #74634a);
+      box-shadow: 0 0 4px rgba(255,241,216,0.25);
+      pointer-events: none;
+      transition: box-shadow 0.1s;
+    }
+
+    .string-track.plucked .string-wire {
+      box-shadow: 0 0 16px var(--gold-accent);
+      background: #ffffff;
+    }
+
+    .asyq-bridge {
+      position: absolute;
+      width: 24px;
+      height: 38px;
+      background: linear-gradient(135deg, #f7f3ea 0%, #cebeaa 100%);
+      border-radius: 6px;
       left: 50%;
-      transform: translateX(-50%);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+      transform: translate(-50%, 50%);
+      cursor: ns-resize;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.75), inset 0 1px 2px rgba(255,255,255,0.9);
+      z-index: 10;
+      touch-action: none;
     }
 
-    .note-name {
-      font-size: 0.8rem;
-      color: var(--accent-gold);
+    .asyq-bridge::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 20%;
+      width: 60%;
+      height: 2px;
+      background: #8e785e;
+      opacity: 0.5;
+    }
+
+    .note-label {
+      position: absolute;
+      bottom: -28px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold-accent);
+      pointer-events: none;
+      letter-spacing: 1px;
+    }
+
+    .panel-controls {
+      margin-top: 24px;
+      display: flex;
+      gap: 16px;
+    }
+
+    .action-btn {
+      background: #24140b;
+      border: 1px solid var(--gold-accent);
+      color: var(--gold-accent);
+      padding: 10px 22px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
       font-weight: 600;
-      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
     }
 
-    /* Sections */
-    .section-title {
-      font-size: 1.4rem;
-      color: var(--accent-gold);
-      margin-bottom: 12px;
-      border-bottom: 1px solid rgba(212,175,55,0.2);
-      padding-bottom: 6px;
-    }
-
-    .content-block {
-      background: rgba(255,255,255,0.02);
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 24px;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-
-    p {
-      margin-bottom: 14px;
-      color: var(--text-main);
+    .action-btn:hover {
+      background: var(--gold-accent);
+      color: #120904;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="brand">Zhetigen</div>
-    <div class="tagline">Kjeli saz ben babalar amanaty</div>
+    <div class="brand">Жетіген</div>
+    <div class="tagline">Физикалық синтез бен жылжымалы асық-тиектер жүйесі</div>
   </header>
 
-  <div class="container">
-    <div class="instrument-card">
-      <div class="instruction">Tinderdi qaragnyz nemese tygndap korigniz (1 - 7 perneler)</div>
-      
-      <div class="strings-container" id="zhetigenBoard">
-        <!-- Strings generated by JS -->
-      </div>
-    </div>
+  <div class="instrument-body" id="zhetigenBody">
+    <div class="sound-hole tl"></div>
+    <div class="sound-hole br"></div>
 
-    <div class="section-title">Zheti qater zhane zheti kuij</div>
-    <div class="content-block">
-      <p>Agnyz bojynsha, erte zamanda bir qarjanygn zheti uly zhut zhyly air-tuirli sebeptermen azhal qushady. Airbir uly qaza bolghan sajyn qajghyly aike bir ishten asyq qojyp, sypyryp tartqan tindi shertip, kuij shygharghan eken.</p>
-      <p>Osylyajsha halyq arasyna «Zhetigen» atauuly zheti tindi, mugny men taghzymyn zhetkizetin kjeli aspap taraghan.</p>
-    </div>
-
-    <div class="section-title">Zhetigen qurylymy</div>
-    <div class="content-block">
-      <p>Zhetigen — qushtauuly aghashtan ojylyp zhasalatyn, tinderinign astyna asyq qojylatyn kuoignildi aspap. Qazirgi tagnda tinder sany 15-23-ke dejin zhetip, auuqymy kegnejgen.</p>
+    <div class="strings-stage" id="stringsArea">
+      <!-- Ішектер динамикалық түрде генерацияланады -->
     </div>
   </div>
 
+  <div class="panel-controls">
+    <button class="action-btn" id="resetTunings">Бұрауды қалпына келтіру</button>
+  </div>
+
   <script>
-    // Web Audio API Synth for Harpsichord/Pluck Sound
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const ctx = new AudioContext();
+    class ZhetigenSynth {
+      constructor() {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AudioCtx();
+        this.master = this.ctx.createGain();
+        this.master.gain.value = 0.8;
 
-    const notes = [
-      { name: "1 (C4)", freq: 261.63, asyqPos: "70%" },
-      { name: "2 (D4)", freq: 293.66, asyqPos: "65%" },
-      { name: "3 (E4)", freq: 329.63, asyqPos: "60%" },
-      { name: "4 (G4)", freq: 392.00, asyqPos: "55%" },
-      { name: "5 (A4)", freq: 440.00, asyqPos: "50%" },
-      { name: "6 (C5)", freq: 523.25, asyqPos: "45%" },
-      { name: "7 (D5)", freq: 587.33, asyqPos: "40%" }
-    ];
+        this.convolver = this.ctx.createConvolver();
+        this.convolver.buffer = this.buildBodyImpulse(0.8, 0.35);
 
-    const board = document.getElementById("zhetigenBoard");
-
-    function playPluck(freq) {
-      if (ctx.state === 'suspended') {
-        ctx.resume();
+        this.convolver.connect(this.master);
+        this.master.connect(this.ctx.destination);
       }
 
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      buildBodyImpulse(duration, decay) {
+        const rate = this.ctx.sampleRate;
+        const total = Math.floor(rate * duration);
+        const impulse = this.ctx.createBuffer(2, total, rate);
+        for (let c = 0; c < 2; c++) {
+          const chData = impulse.getChannelData(c);
+          for (let i = 0; i < total; i++) {
+            chData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (rate * (decay / 4)));
+          }
+        }
+        return impulse;
+      }
 
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      pluck(freq, velocity = 0.9) {
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
 
-      gain.gain.setValueAtTime(0.8, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.8);
+        const rate = this.ctx.sampleRate;
+        const period = Math.max(Math.round(rate / freq), 64);
+        const noise = this.ctx.createBuffer(1, period, rate);
+        const bufferData = noise.getChannelData(0);
+        for (let i = 0; i < period; i++) {
+          bufferData[i] = (Math.random() * 2 - 1) * velocity;
+        }
 
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+        const src = this.ctx.createBufferSource();
+        src.buffer = noise;
 
-      osc.start();
-      osc.stop(ctx.currentTime + 1.8);
+        const delay = this.ctx.createDelay(1.0);
+        delay.delayTime.value = 1.0 / freq;
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = Math.min(freq * 3.8, 7500);
+
+        const feedback = this.ctx.createGain();
+        feedback.gain.value = 0.985;
+
+        src.connect(delay);
+        delay.connect(filter);
+        filter.connect(feedback);
+        feedback.connect(delay);
+
+        const ampEnvelope = this.ctx.createGain();
+        ampEnvelope.gain.setValueAtTime(velocity, this.ctx.currentTime);
+        ampEnvelope.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 2.5);
+
+        filter.connect(ampEnvelope);
+        ampEnvelope.connect(this.master);
+        ampEnvelope.connect(this.convolver);
+
+        src.start();
+        src.stop(this.ctx.currentTime + (period / rate));
+
+        setTimeout(() => {
+          src.disconnect();
+          delay.disconnect();
+          filter.disconnect();
+          feedback.disconnect();
+          ampEnvelope.disconnect();
+        }, 2600);
+      }
     }
 
-    notes.forEach((item, index) => {
-      const col = document.createElement("div");
-      col.className = "string-col";
-      col.innerHTML = `
-        <div class="string-line">
-          <div class="asyq" style="bottom: ${item.asyqPos};"></div>
-        </div>
-        <div class="note-name">${item.name}</div>
-      `;
+    const synthEngine = new ZhetigenSynth();
+    const stage = document.getElementById('stringsArea');
 
-      col.addEventListener("pointerdown", () => {
-        col.classList.add("active");
-        playPluck(item.freq);
-        setTimeout(() => col.classList.remove("active"), 150);
+    const scaleConfig = [
+      { key: "1", note: "C4", baseFreq: 261.63, pos: 0.70 },
+      { key: "2", note: "D4", baseFreq: 293.66, pos: 0.65 },
+      { key: "3", note: "E4", baseFreq: 329.63, pos: 0.60 },
+      { key: "4", note: "G4", baseFreq: 392.00, pos: 0.55 },
+      { key: "5", note: "A4", baseFreq: 440.00, pos: 0.50 },
+      { key: "6", note: "C5", baseFreq: 523.25, pos: 0.45 },
+      { key: "7", note: "D5", baseFreq: 587.33, pos: 0.40 }
+    ];
+
+    const stringState = scaleConfig.map(c => ({
+      ...c,
+      currentFreq: c.baseFreq,
+      currentPos: c.pos,
+      trackElem: null,
+      bridgeElem: null
+    }));
+
+    function calcFrequency(baseFreq, relativePos) {
+      return baseFreq * (0.6 / Math.max(0.15, relativePos));
+    }
+
+    stringState.forEach((item, index) => {
+      const track = document.createElement('div');
+      track.className = 'string-track';
+
+      const wire = document.createElement('div');
+      wire.className = 'string-wire';
+
+      const bridge = document.createElement('div');
+      bridge.className = 'asyq-bridge';
+      bridge.style.bottom = `${item.pos * 100}%`;
+
+      const label = document.createElement('div');
+      label.className = 'note-label';
+      label.innerText = `${item.key} (${item.note})`;
+
+      track.appendChild(wire);
+      track.appendChild(bridge);
+      track.appendChild(label);
+      stage.appendChild(track);
+
+      item.trackElem = track;
+      item.bridgeElem = bridge;
+
+      const executePluck = () => {
+        synthEngine.pluck(item.currentFreq);
+        track.classList.add('plucked');
+        setTimeout(() => track.classList.remove('plucked'), 180);
+      };
+
+      track.addEventListener('pointerdown', (e) => {
+        if (e.target !== bridge) {
+          executePluck();
+        }
       });
 
-      board.appendChild(col);
+      let dragging = false;
+      bridge.addEventListener('pointerdown', (e) => {
+        dragging = true;
+        bridge.setPointerCapture(e.pointerId);
+        e.stopPropagation();
+      });
+
+      bridge.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        const rect = track.getBoundingClientRect();
+        let newPos = 1 - ((e.clientY - rect.top) / rect.height);
+        newPos = Math.max(0.15, Math.min(0.85, newPos));
+
+        item.currentPos = newPos;
+        bridge.style.bottom = `${newPos * 100}%`;
+        item.currentFreq = calcFrequency(item.baseFreq, newPos);
+      });
+
+      const releaseDrag = (e) => {
+        if (dragging) {
+          dragging = false;
+          try { bridge.releasePointerCapture(e.pointerId); } catch(err) {}
+          executePluck();
+        }
+      };
+
+      bridge.addEventListener('pointerup', releaseDrag);
+      bridge.addEventListener('pointercancel', releaseDrag);
     });
 
-    window.addEventListener("keydown", (e) => {
-      const num = parseInt(e.key);
-      if (num >= 1 && num <= 7) {
-        const col = board.children[num - 1];
-        col.classList.add("active");
-        playPluck(notes[num - 1].freq);
-        setTimeout(() => col.classList.remove("active"), 150);
+    let swiping = false;
+    stage.addEventListener('pointerdown', () => swiping = true);
+    window.addEventListener('pointerup', () => swiping = false);
+
+    stage.addEventListener('pointermove', (e) => {
+      if (!swiping) return;
+      const target = document.elementFromPoint(e.clientX, e.clientY)?.closest('.string-track');
+      if (target) {
+        const idx = Array.from(stage.children).indexOf(target);
+        if (idx !== -1 && !target.classList.contains('plucked')) {
+          synthEngine.pluck(stringState[idx].currentFreq, 0.75);
+          target.classList.add('plucked');
+          setTimeout(() => target.classList.remove('plucked'), 150);
+        }
       }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      const index = scaleConfig.findIndex(c => c.key === e.key);
+      if (index !== -1) {
+        synthEngine.pluck(stringState[index].currentFreq);
+        stringState[index].trackElem.classList.add('plucked');
+        setTimeout(() => stringState[index].trackElem.classList.remove('plucked'), 150);
+      }
+    });
+
+    document.getElementById('resetTunings').addEventListener('click', () => {
+      stringState.forEach((item, index) => {
+        item.currentPos = scaleConfig[index].pos;
+        item.currentFreq = scaleConfig[index].baseFreq;
+        item.bridgeElem.style.bottom = `${item.currentPos * 100}%`;
+      });
     });
   </script>
 </body>
 </html>
-
