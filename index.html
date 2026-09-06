@@ -2,11 +2,12 @@
 <html lang="kk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Zhetigen Úni</title>
   <style>
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
     body {
       margin: 0;
@@ -18,33 +19,35 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      touch-action: none;
+      touch-action: none; /* Ekrannyń arly-berli yǵysyp ketpeui úshin */
+      overflow: hidden;
+      user-select: none;
     }
     h2 {
       letter-spacing: 2px;
-      margin-bottom: 6px;
+      margin: 0 0 6px 0;
       font-weight: 500;
     }
     p {
       color: #8c7662;
       font-size: 14px;
-      margin-bottom: 20px;
+      margin: 0 0 24px 0;
     }
     .instrument {
       display: flex;
       gap: 16px;
-      padding: 36px 28px;
+      padding: 34px 26px;
       background: linear-gradient(180deg, #2a1810 0%, #150b07 100%);
       border: 2px solid #3d261a;
       border-radius: 16px;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
-      user-select: none;
+      cursor: pointer;
     }
     .string-wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
-      cursor: pointer;
+      padding: 0 4px;
     }
     .string {
       width: 22px;
@@ -53,6 +56,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      pointer-events: none; /* Saýsaqtyń tıyuyn ata-anasyna ótkizu */
     }
     .string::before {
       content: '';
@@ -78,16 +82,17 @@
       font-size: 13px;
       font-weight: bold;
       color: #dfb15b;
+      pointer-events: none;
     }
     .string-wrap.active .string::before {
-      transform: scaleX(2.4);
+      transform: scaleX(2.6);
       box-shadow: 0 0 14px #ffe699;
       background: #fff3c4;
     }
     .controls {
       display: flex;
       gap: 12px;
-      margin-top: 28px;
+      margin-top: 26px;
     }
     .btn {
       background: #24140c;
@@ -108,7 +113,7 @@
 <body>
 
   <h2>ZHETIGEN</h2>
-  <p>Ishekterdi jeke shertińiz nemese qaǵysty basyńyz</p>
+  <p>Ishekterdi saýsaqpen syzyp qaǵyńyz</p>
 
   <div class="instrument" id="zhetigen"></div>
 
@@ -178,7 +183,8 @@
     const container = document.getElementById('zhetigen');
     const wrapElements = [];
 
-    freqs.forEach((item, index) => {
+    // Ishekterdi jasaý
+    freqs.forEach((item) => {
       const wrap = document.createElement('div');
       wrap.className = 'string-wrap';
 
@@ -189,47 +195,77 @@
         <div class="string-num">${item.num}</div>
       `;
 
-      const pluck = (e) => {
-        if (e) e.preventDefault();
-        playZhetigenString(item.f);
-        wrap.classList.add('active');
-        setTimeout(() => wrap.classList.remove('active'), 140);
-      };
-
-      wrap.addEventListener('pointerdown', pluck);
-      wrap.addEventListener('pointerenter', (e) => {
-        if (e.buttons === 1) pluck();
-      });
-
       container.appendChild(wrap);
       wrapElements.push(wrap);
     });
 
-    // Barlyq ishekti keshiktirumen nemese birden qaǵu fýnktsııasy
+    function triggerString(idx) {
+      if (idx < 0 || idx >= freqs.length) return;
+      playZhetigenString(freqs[idx].f);
+      const wrap = wrapElements[idx];
+      wrap.classList.add('active');
+      setTimeout(() => wrap.classList.remove('active'), 140);
+    }
+
+    // Saýsaqpen nemese tishqanmen syzyp ótý (Swipe / Glissando) mehanızmi
+    let isInteracting = false;
+    let lastPluckedIndex = -1;
+
+    function handlePointerAt(clientX, clientY) {
+      const target = document.elementFromPoint(clientX, clientY);
+      if (!target) return;
+      const wrap = target.closest('.string-wrap');
+      if (wrap) {
+        const idx = wrapElements.indexOf(wrap);
+        if (idx !== -1 && idx !== lastPluckedIndex) {
+          lastPluckedIndex = idx;
+          triggerString(idx);
+        }
+      } else {
+        lastPluckedIndex = -1;
+      }
+    }
+
+    window.addEventListener('pointerdown', (e) => {
+      getAudioContext();
+      isInteracting = true;
+      lastPluckedIndex = -1;
+      handlePointerAt(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!isInteracting) return;
+      handlePointerAt(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('pointerup', () => {
+      isInteracting = false;
+      lastPluckedIndex = -1;
+    });
+
+    window.addEventListener('pointercancel', () => {
+      isInteracting = false;
+      lastPluckedIndex = -1;
+    });
+
+    // Avtomatty qaǵys jáne akkord túımeleri
     function strumAllStrings(delayMs) {
       freqs.forEach((item, idx) => {
         setTimeout(() => {
-          playZhetigenString(item.f);
-          wrapElements[idx].classList.add('active');
-          setTimeout(() => wrapElements[idx].classList.remove('active'), 150);
+          triggerString(idx);
         }, idx * delayMs);
       });
     }
 
-    // Qaǵys: ár ishekke 45 ms aralyqpen (naǵyz zhetigenge tán arpejio)
-    document.getElementById('strumBtn').addEventListener('click', () => {
+    document.getElementById('strumBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
       strumAllStrings(45);
     });
 
-    // Akkord: barlyq ishekti dál bir mezgilde (0 ms) shertu
-    document.getElementById('chordBtn').addEventListener('click', () => {
+    document.getElementById('chordBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
       strumAllStrings(0);
     });
-
-    // Brauzer ruqsaty
-    window.addEventListener('pointerdown', () => {
-      getAudioContext();
-    }, { once: true });
   </script>
 </body>
 </html>
