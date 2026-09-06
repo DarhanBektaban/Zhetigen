@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zhetigen | Сандық кәсіби аспап</title>
+  <title>Жетіген | Ұлттық акустикалық аспап</title>
   <style>
     :root {
-      --bg-surface: #0a0705;
-      --wood-frame: #24140b;
-      --wood-top: #3b2214;
-      --gold-accent: #dfb235;
-      --bone-color: #f4ede1;
-      --string-base: #d2c2a4;
+      --bg-surface: #0e0906;
+      --wood-dark: #221208;
+      --wood-mid: #381f12;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.4);
+      --bone: #f7f3e8;
     }
 
     * {
@@ -30,37 +30,37 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      padding: 24px 16px;
+      padding: 30px 16px;
     }
 
     header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .brand {
       font-size: 2.2rem;
       font-weight: 800;
-      color: var(--gold-accent);
-      letter-spacing: 4px;
+      color: var(--gold);
+      letter-spacing: 5px;
       text-transform: uppercase;
-      text-shadow: 0 2px 12px rgba(223,178,53,0.3);
+      text-shadow: 0 3px 15px var(--gold-glow);
     }
 
     .tagline {
       font-size: 0.9rem;
-      color: #9e8e82;
-      margin-top: 4px;
+      color: #a59385;
+      margin-top: 6px;
     }
 
     .instrument-body {
       width: 100%;
-      max-width: 920px;
+      max-width: 900px;
       height: 380px;
-      background: linear-gradient(180deg, #2b170c 0%, #150a05 100%);
-      border: 4px solid #482614;
-      border-radius: 20px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.85), inset 0 0 50px rgba(0,0,0,0.7);
+      background: radial-gradient(ellipse at center, var(--wood-mid) 0%, var(--wood-dark) 100%);
+      border: 6px solid #4a2817;
+      border-radius: 24px;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,0.8);
       position: relative;
       padding: 30px 40px;
       touch-action: none;
@@ -68,20 +68,20 @@
 
     .sound-hole {
       position: absolute;
-      width: 46px;
-      height: 46px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: #080402;
-      border: 2px solid rgba(223,178,53,0.25);
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.9);
+      background: #090503;
+      border: 2px solid rgba(212,175,55,0.3);
+      box-shadow: inset 0 3px 10px rgba(0,0,0,0.9);
     }
-    .sound-hole.tl { top: 20px; left: 24px; }
-    .sound-hole.br { bottom: 20px; right: 24px; }
+    .sound-hole.tl { top: 24px; left: 24px; }
+    .sound-hole.br { bottom: 24px; right: 24px; }
 
     .strings-stage {
       position: relative;
       width: 100%;
-      height: 280px;
+      height: 270px;
       display: flex;
       justify-content: space-between;
     }
@@ -98,74 +98,75 @@
     .string-wire {
       width: 2px;
       height: 100%;
-      background: linear-gradient(90deg, #9f8c6f, #fff1d8, #74634a);
-      box-shadow: 0 0 4px rgba(255,241,216,0.25);
+      background: linear-gradient(90deg, #8a785d, #fff0d4, #5c4e3a);
+      box-shadow: 0 0 3px rgba(255,240,212,0.3);
       pointer-events: none;
-      transition: box-shadow 0.1s;
+      transform-origin: center;
     }
 
-    .string-track.plucked .string-wire {
-      box-shadow: 0 0 16px var(--gold-accent);
+    /* Тербеліс анимациясы */
+    @keyframes stringVibrate {
+      0% { transform: scaleX(1); }
+      25% { transform: scaleX(3.5) translateX(1px); }
+      50% { transform: scaleX(1); }
+      75% { transform: scaleX(3.5) translateX(-1px); }
+      100% { transform: scaleX(1); }
+    }
+
+    .string-track.vibrating .string-wire {
+      animation: stringVibrate 0.08s linear infinite;
+      box-shadow: 0 0 10px var(--gold);
       background: #ffffff;
     }
 
     .asyq-bridge {
       position: absolute;
-      width: 24px;
-      height: 38px;
-      background: linear-gradient(135deg, #f7f3ea 0%, #cebeaa 100%);
+      width: 22px;
+      height: 36px;
+      background: linear-gradient(135deg, #ffffff 0%, #cfc0ad 100%);
       border-radius: 6px;
       left: 50%;
       transform: translate(-50%, 50%);
       cursor: ns-resize;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.75), inset 0 1px 2px rgba(255,255,255,0.9);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.8), inset 0 1px 1px #fff;
       z-index: 10;
       touch-action: none;
     }
 
-    .asyq-bridge::before {
-      content: "";
+    .note-info {
       position: absolute;
-      top: 50%;
-      left: 20%;
-      width: 60%;
-      height: 2px;
-      background: #8e785e;
-      opacity: 0.5;
-    }
-
-    .note-label {
-      position: absolute;
-      bottom: -28px;
+      bottom: -32px;
       font-size: 0.75rem;
       font-weight: 700;
-      color: var(--gold-accent);
+      color: var(--gold);
       pointer-events: none;
-      letter-spacing: 1px;
+      white-space: nowrap;
+      text-align: center;
     }
 
     .panel-controls {
-      margin-top: 24px;
+      margin-top: 30px;
       display: flex;
-      gap: 16px;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .action-btn {
       background: #24140b;
-      border: 1px solid var(--gold-accent);
-      color: var(--gold-accent);
-      padding: 10px 22px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 10px 20px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      text-transform: uppercase;
       letter-spacing: 1px;
       transition: all 0.2s ease;
     }
 
     .action-btn:hover {
-      background: var(--gold-accent);
+      background: var(--gold);
       color: #120904;
     }
   </style>
@@ -174,128 +175,159 @@
 
   <header>
     <div class="brand">Жетіген</div>
-    <div class="tagline">Физикалық синтез бен жылжымалы асық-тиектер жүйесі</div>
+    <div class="tagline">Ағаш шанақты акустикалық синтез және жылжымалы асықтар</div>
   </header>
 
-  <div class="instrument-body" id="zhetigenBody">
+  <div class="instrument-body">
     <div class="sound-hole tl"></div>
     <div class="sound-hole br"></div>
 
-    <div class="strings-stage" id="stringsArea">
-      <!-- Ішектер динамикалық түрде генерацияланады -->
-    </div>
+    <div class="strings-stage" id="stringsArea"></div>
   </div>
 
   <div class="panel-controls">
-    <button class="action-btn" id="resetTunings">Бұрауды қалпына келтіру</button>
+    <button class="action-btn" id="tunePentatonic">Пентатоника (Дәстүрлі)</button>
+    <button class="action-btn" id="tuneDiatonic">Диатоника</button>
   </div>
 
   <script>
-    class ZhetigenSynth {
+    class AcousticZhetigenAudio {
       constructor() {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         this.ctx = new AudioCtx();
+
+        // 1. Ағаш шанақ резонансы (Acoustic Body Resonator)
+        this.bodyLow = this.ctx.createBiquadFilter();
+        this.bodyLow.type = 'peaking';
+        this.bodyLow.frequency.value = 210; // Шанақтың негізгі терең үні
+        this.bodyLow.Q.value = 2.0;
+        this.bodyLow.gain.value = 6;
+
+        this.bodyMid = this.ctx.createBiquadFilter();
+        this.bodyMid.type = 'peaking';
+        this.bodyMid.frequency.value = 460; // Ағаштың ортаңғы жиілігі
+        this.bodyMid.Q.value = 1.8;
+        this.bodyMid.gain.value = 4;
+
+        // 2. Металл сықырды кесетін жұмсартқыш сүзгі
+        this.softener = this.ctx.createBiquadFilter();
+        this.softener.type = 'highshelf';
+        this.softener.frequency.value = 3500;
+        this.softener.gain.value = -8;
+
         this.master = this.ctx.createGain();
-        this.master.gain.value = 0.8;
+        this.master.gain.value = 1.0;
 
-        this.convolver = this.ctx.createConvolver();
-        this.convolver.buffer = this.buildBodyImpulse(0.8, 0.35);
-
-        this.convolver.connect(this.master);
+        // Тізбекті жалғау
+        this.bodyLow.connect(this.bodyMid);
+        this.bodyMid.connect(this.softener);
+        this.softener.connect(this.master);
         this.master.connect(this.ctx.destination);
       }
 
-      buildBodyImpulse(duration, decay) {
-        const rate = this.ctx.sampleRate;
-        const total = Math.floor(rate * duration);
-        const impulse = this.ctx.createBuffer(2, total, rate);
-        for (let c = 0; c < 2; c++) {
-          const chData = impulse.getChannelData(c);
-          for (let i = 0; i < total; i++) {
-            chData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (rate * (decay / 4)));
-          }
-        }
-        return impulse;
-      }
-
-      pluck(freq, velocity = 0.9) {
+      pluck(freq, velocity = 0.8) {
         if (this.ctx.state === 'suspended') {
           this.ctx.resume();
         }
 
-        const rate = this.ctx.sampleRate;
-        const period = Math.max(Math.round(rate / freq), 64);
-        const noise = this.ctx.createBuffer(1, period, rate);
-        const bufferData = noise.getChannelData(0);
+        const sampleRate = this.ctx.sampleRate;
+        const period = Math.round(sampleRate / freq);
+        
+        // Сықырды жою үшін: кездейсоқ шуды жұмсақ тереземен (windowing) өңдеу
+        const noiseBuffer = this.ctx.createBuffer(1, period, sampleRate);
+        const output = noiseBuffer.getChannelData(0);
         for (let i = 0; i < period; i++) {
-          bufferData[i] = (Math.random() * 2 - 1) * velocity;
+          // Ханн терезесімен басталған және аяқталған жұмсақ шертпе импульсі
+          const envelope = 0.5 * (1 - Math.cos((2 * Math.PI * i) / period));
+          output[i] = (Math.random() * 2 - 1) * envelope * velocity;
         }
 
-        const src = this.ctx.createBufferSource();
-        src.buffer = noise;
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = noiseBuffer;
 
         const delay = this.ctx.createDelay(1.0);
         delay.delayTime.value = 1.0 / freq;
 
-        const filter = this.ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.value = Math.min(freq * 3.8, 7500);
+        // Ішек ішіндегі тұншығу сүзгісі (damping filter)
+        const dampFilter = this.ctx.createBiquadFilter();
+        dampFilter.type = 'lowpass';
+        // Жоғары ноталар тым қатты сыңғырламауы үшін шектеу
+        dampFilter.frequency.value = Math.min(freq * 2.2, 3800);
 
         const feedback = this.ctx.createGain();
-        feedback.gain.value = 0.985;
+        feedback.gain.value = 0.978; // Тұрақты өшу дәрежесі
 
-        src.connect(delay);
-        delay.connect(filter);
-        filter.connect(feedback);
+        // Ілмек (Loop)
+        noise.connect(delay);
+        delay.connect(dampFilter);
+        dampFilter.connect(feedback);
         feedback.connect(delay);
 
-        const ampEnvelope = this.ctx.createGain();
-        ampEnvelope.gain.setValueAtTime(velocity, this.ctx.currentTime);
-        ampEnvelope.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 2.5);
+        // Жұмсақ өшу конверті
+        const env = this.ctx.createGain();
+        env.gain.setValueAtTime(1.0, this.ctx.currentTime);
+        env.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 3.0);
 
-        filter.connect(ampEnvelope);
-        ampEnvelope.connect(this.master);
-        ampEnvelope.connect(this.convolver);
+        dampFilter.connect(env);
+        env.connect(this.bodyLow);
 
-        src.start();
-        src.stop(this.ctx.currentTime + (period / rate));
+        noise.start();
 
+        // 3 секундтан кейін тораптарды жабу
         setTimeout(() => {
-          src.disconnect();
+          noise.disconnect();
           delay.disconnect();
-          filter.disconnect();
+          dampFilter.disconnect();
           feedback.disconnect();
-          ampEnvelope.disconnect();
-        }, 2600);
+          env.disconnect();
+        }, 3000);
       }
     }
 
-    const synthEngine = new ZhetigenSynth();
+    const synth = new AcousticZhetigenAudio();
     const stage = document.getElementById('stringsArea');
 
-    const scaleConfig = [
-      { key: "1", note: "C4", baseFreq: 261.63, pos: 0.70 },
-      { key: "2", note: "D4", baseFreq: 293.66, pos: 0.65 },
+    const pentatonicPresets = [
+      { key: "1", note: "C4", baseFreq: 261.63, pos: 0.72 },
+      { key: "2", note: "D4", baseFreq: 293.66, pos: 0.66 },
       { key: "3", note: "E4", baseFreq: 329.63, pos: 0.60 },
-      { key: "4", note: "G4", baseFreq: 392.00, pos: 0.55 },
-      { key: "5", note: "A4", baseFreq: 440.00, pos: 0.50 },
-      { key: "6", note: "C5", baseFreq: 523.25, pos: 0.45 },
-      { key: "7", note: "D5", baseFreq: 587.33, pos: 0.40 }
+      { key: "4", note: "G4", baseFreq: 392.00, pos: 0.53 },
+      { key: "5", note: "A4", baseFreq: 440.00, pos: 0.47 },
+      { key: "6", note: "C5", baseFreq: 523.25, pos: 0.40 },
+      { key: "7", note: "D5", baseFreq: 587.33, pos: 0.34 }
     ];
 
-    const stringState = scaleConfig.map(c => ({
-      ...c,
-      currentFreq: c.baseFreq,
-      currentPos: c.pos,
-      trackElem: null,
-      bridgeElem: null
+    const diatonicPresets = [
+      { key: "1", note: "C4", baseFreq: 261.63, pos: 0.75 },
+      { key: "2", note: "D4", baseFreq: 293.66, pos: 0.68 },
+      { key: "3", note: "E4", baseFreq: 329.63, pos: 0.62 },
+      { key: "4", note: "F4", baseFreq: 349.23, pos: 0.56 },
+      { key: "5", note: "G4", baseFreq: 392.00, pos: 0.50 },
+      { key: "6", note: "A4", baseFreq: 440.00, pos: 0.42 },
+      { key: "7", note: "B4", baseFreq: 493.88, pos: 0.35 }
+    ];
+
+    let strings = pentatonicPresets.map(p => ({
+      ...p,
+      freq: p.baseFreq,
+      currentPos: p.pos,
+      track: null,
+      bridge: null,
+      info: null
     }));
 
-    function calcFrequency(baseFreq, relativePos) {
-      return baseFreq * (0.6 / Math.max(0.15, relativePos));
+    function calcFreq(base, pos) {
+      return base * (0.6 / Math.max(0.18, pos));
     }
 
-    stringState.forEach((item, index) => {
+    function triggerPluck(index) {
+      const s = strings[index];
+      synth.pluck(s.freq);
+      s.track.classList.add('vibrating');
+      setTimeout(() => s.track.classList.remove('vibrating'), 400);
+    }
+
+    strings.forEach((s, idx) => {
       const track = document.createElement('div');
       track.className = 'string-track';
 
@@ -304,32 +336,26 @@
 
       const bridge = document.createElement('div');
       bridge.className = 'asyq-bridge';
-      bridge.style.bottom = `${item.pos * 100}%`;
+      bridge.style.bottom = `${s.pos * 100}%`;
 
-      const label = document.createElement('div');
-      label.className = 'note-label';
-      label.innerText = `${item.key} (${item.note})`;
+      const info = document.createElement('div');
+      info.className = 'note-info';
+      info.innerText = `${s.key}: ${s.note}`;
 
       track.appendChild(wire);
       track.appendChild(bridge);
-      track.appendChild(label);
+      track.appendChild(info);
       stage.appendChild(track);
 
-      item.trackElem = track;
-      item.bridgeElem = bridge;
-
-      const executePluck = () => {
-        synthEngine.pluck(item.currentFreq);
-        track.classList.add('plucked');
-        setTimeout(() => track.classList.remove('plucked'), 180);
-      };
+      s.track = track;
+      s.bridge = bridge;
+      s.info = info;
 
       track.addEventListener('pointerdown', (e) => {
-        if (e.target !== bridge) {
-          executePluck();
-        }
+        if (e.target !== bridge) triggerPluck(idx);
       });
 
+      // Асықты сүйреу логикасы
       let dragging = false;
       bridge.addEventListener('pointerdown', (e) => {
         dragging = true;
@@ -341,58 +367,44 @@
         if (!dragging) return;
         const rect = track.getBoundingClientRect();
         let newPos = 1 - ((e.clientY - rect.top) / rect.height);
-        newPos = Math.max(0.15, Math.min(0.85, newPos));
+        newPos = Math.max(0.18, Math.min(0.82, newPos));
 
-        item.currentPos = newPos;
+        s.currentPos = newPos;
         bridge.style.bottom = `${newPos * 100}%`;
-        item.currentFreq = calcFrequency(item.baseFreq, newPos);
+        s.freq = calcFreq(s.baseFreq, newPos);
+        info.innerText = `${s.key}: ${Math.round(s.freq)}Hz`;
       });
 
-      const releaseDrag = (e) => {
+      const stopDrag = (e) => {
         if (dragging) {
           dragging = false;
           try { bridge.releasePointerCapture(e.pointerId); } catch(err) {}
-          executePluck();
+          triggerPluck(idx);
         }
       };
-
-      bridge.addEventListener('pointerup', releaseDrag);
-      bridge.addEventListener('pointercancel', releaseDrag);
+      bridge.addEventListener('pointerup', stopDrag);
+      bridge.addEventListener('pointercancel', stopDrag);
     });
 
-    let swiping = false;
-    stage.addEventListener('pointerdown', () => swiping = true);
-    window.addEventListener('pointerup', () => swiping = false);
-
-    stage.addEventListener('pointermove', (e) => {
-      if (!swiping) return;
-      const target = document.elementFromPoint(e.clientX, e.clientY)?.closest('.string-track');
-      if (target) {
-        const idx = Array.from(stage.children).indexOf(target);
-        if (idx !== -1 && !target.classList.contains('plucked')) {
-          synthEngine.pluck(stringState[idx].currentFreq, 0.75);
-          target.classList.add('plucked');
-          setTimeout(() => target.classList.remove('plucked'), 150);
-        }
-      }
-    });
-
+    // Пернетақта арқылы ойнау
     window.addEventListener('keydown', (e) => {
-      const index = scaleConfig.findIndex(c => c.key === e.key);
-      if (index !== -1) {
-        synthEngine.pluck(stringState[index].currentFreq);
-        stringState[index].trackElem.classList.add('plucked');
-        setTimeout(() => stringState[index].trackElem.classList.remove('plucked'), 150);
-      }
+      const idx = strings.findIndex(s => s.key === e.key);
+      if (idx !== -1) triggerPluck(idx);
     });
 
-    document.getElementById('resetTunings').addEventListener('click', () => {
-      stringState.forEach((item, index) => {
-        item.currentPos = scaleConfig[index].pos;
-        item.currentFreq = scaleConfig[index].baseFreq;
-        item.bridgeElem.style.bottom = `${item.currentPos * 100}%`;
+    // Бұрауларды ауыстыру
+    function applyPreset(presets) {
+      presets.forEach((p, idx) => {
+        strings[idx].baseFreq = p.baseFreq;
+        strings[idx].freq = p.baseFreq;
+        strings[idx].currentPos = p.pos;
+        strings[idx].bridge.style.bottom = `${p.pos * 100}%`;
+        strings[idx].info.innerText = `${p.key}: ${p.note}`;
       });
-    });
+    }
+
+    document.getElementById('tunePentatonic').addEventListener('click', () => applyPreset(pentatonicPresets));
+    document.getElementById('tuneDiatonic').addEventListener('click', () => applyPreset(diatonicPresets));
   </script>
 </body>
 </html>
