@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Zhetigen Uini</title>
+  <title>Zhetigen — Dástuir Úni</title>
   <style>
     * {
       box-sizing: border-box;
@@ -11,161 +11,250 @@
     }
     body {
       margin: 0;
-      background: #0d0907;
+      background: #090605;
       color: #dfb15b;
       font-family: system-ui, -apple-system, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       min-height: 100vh;
-      touch-action: none;
-      overflow: hidden;
+      overflow-x: hidden;
       user-select: none;
     }
-    h2 {
-      letter-spacing: 2px;
+    header {
+      text-align: center;
+      padding: 30px 16px 10px 16px;
+    }
+    h1 {
+      letter-spacing: 4px;
       margin: 0 0 6px 0;
-      font-weight: 500;
+      font-size: 26px;
+      font-weight: 600;
+      color: #e5be65;
     }
-    p {
+    p.sub {
       color: #8c7662;
-      font-size: 14px;
-      margin: 0 0 22px 0;
+      font-size: 13px;
+      margin: 0;
     }
-    .instrument {
+
+    /* Zhetigenniń aǵash shanaǵy */
+    .instrument-container {
+      margin: 20px auto;
+      padding: 10px;
       display: flex;
-      gap: 16px;
-      padding: 34px 26px;
-      background: linear-gradient(180deg, #2a1810 0%, #150b07 100%);
-      border: 2px solid #3d261a;
-      border-radius: 16px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
-      cursor: pointer;
+      justify-content: center;
     }
-    .string-wrap {
+    .zhetigen-body {
+      position: relative;
+      width: 340px;
+      height: 380px;
+      background: radial-gradient(circle at 50% 30%, #3d2214 0%, #1c0d06 80%, #110703 100%);
+      border: 4px solid #4a2d1a;
+      border-radius: 12px 12px 18px 18px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: space-around;
+      padding: 30px 14px 20px 14px;
+      touch-action: none;
+    }
+
+    /* Joǵarǵy jáne tómengi kórkem keriş aǵashtar */
+    .zhetigen-body::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 10px;
+      right: 10px;
+      height: 8px;
+      background: #140904;
+      border-radius: 4px;
+      border-bottom: 1px solid #5a351d;
+    }
+    .zhetigen-body::after {
+      content: '';
+      position: absolute;
+      bottom: 16px;
+      left: 10px;
+      right: 10px;
+      height: 8px;
+      background: #140904;
+      border-radius: 4px;
+      border-top: 1px solid #5a351d;
+    }
+
+    /* Ishekter */
+    .string-track {
+      position: relative;
+      width: 38px;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0 4px;
+      cursor: pointer;
     }
-    .string {
+    .string-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2.5px;
+      background: linear-gradient(90deg, #666, #f3d077, #7a5a1e);
+      box-shadow: 0 0 5px rgba(0,0,0,0.8);
+      transition: transform 0.05s ease, background 0.05s ease;
+      pointer-events: none;
+    }
+    .string-track.active .string-line {
+      transform: scaleX(2.8);
+      background: #ffffff;
+      box-shadow: 0 0 12px #ffd56b;
+    }
+
+    /* Asyq (tıek) - Dıagonaldy ornalasady */
+    .asyq {
+      position: absolute;
       width: 22px;
-      height: 280px;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      height: 15px;
+      background: linear-gradient(135deg, #e4caa0 0%, #b89260 50%, #7d5b36 100%);
+      border-radius: 4px 6px 3px 5px;
+      box-shadow: 0 6px 10px rgba(0,0,0,0.8), inset 1px 1px 2px rgba(255,255,255,0.4);
       pointer-events: none;
+      transition: top 0.3s ease;
     }
-    .string::before {
-      content: '';
+
+    .string-note {
       position: absolute;
-      width: 3px;
-      height: 100%;
-      background: linear-gradient(90deg, #555, #f5d77f, #8a6a24);
-      border-radius: 2px;
-      box-shadow: 0 0 4px rgba(0,0,0,0.6);
-      transition: transform 0.05s ease, box-shadow 0.05s ease;
+      bottom: -18px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #9c7d5c;
     }
-    .bridge {
-      width: 14px;
-      height: 10px;
-      background: #c29b62;
-      border-radius: 2px;
-      position: absolute;
-      bottom: 45px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    }
-    .string-num {
-      margin-top: 14px;
-      font-size: 13px;
-      font-weight: bold;
-      color: #dfb15b;
-      pointer-events: none;
-    }
-    .string-wrap.active .string::before {
-      transform: scaleX(2.6);
-      box-shadow: 0 0 14px #ffe699;
-      background: #fff3c4;
-    }
+
+    /* Batyrmalar */
     .controls {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 10px;
-      margin-top: 24px;
-      max-width: 440px;
+      margin: 16px 0 30px 0;
+      padding: 0 16px;
     }
     .btn {
-      background: #24140c;
+      background: #1c0e07;
       color: #dfb15b;
-      border: 1px solid #5a3a22;
+      border: 1px solid #4a2a16;
       padding: 10px 16px;
       border-radius: 8px;
       font-size: 13px;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
+      transition: all 0.15s ease;
     }
     .btn:active {
-      background: #3d2315;
+      background: #381b0c;
       transform: scale(0.96);
     }
-    .btn.highlight {
-      background: #4a2816;
+    .btn.gold {
+      background: #3d200e;
       border-color: #dfb15b;
-      font-weight: bold;
+      font-weight: 600;
+    }
+
+    /* Ańyz ben dástuir qatpary */
+    .history-card {
+      max-width: 520px;
+      margin: 0 16px 40px 16px;
+      padding: 24px;
+      background: #140b07;
+      border: 1px solid #2d180d;
+      border-radius: 12px;
+      line-height: 1.6;
+      font-size: 14px;
+      color: #bfa58a;
+    }
+    .history-card h3 {
+      margin-top: 0;
+      color: #e5be65;
+      font-size: 17px;
+      letter-spacing: 1px;
+    }
+    .strings-list {
+      margin-top: 14px;
+      padding-left: 18px;
+    }
+    .strings-list li {
+      margin-bottom: 6px;
+    }
+    .strings-list b {
+      color: #dfb15b;
     }
   </style>
 </head>
 <body>
 
-  <h2>ZHETIGEN</h2>
-  <p id="statusText">Ishekterdi syzyp shertigniz nemese kuij tygndagnyz</p>
+  <header>
+    <h1>ZHETIGEN</h1>
+    <p class="sub" id="statusText">Ishekterdi saýsaqpen syzyp shertińiz</p>
+  </header>
 
-  <div class="instrument" id="zhetigen"></div>
+  <div class="instrument-container">
+    <div class="zhetigen-body" id="zhetigen"></div>
+  </div>
 
   <div class="controls">
-    <button class="btn highlight" id="playKuiBtn">▶ Kuijdi tygndauu</button>
-    <button class="btn" id="strumBtn">Qaghys</button>
-    <button class="btn" id="chordBtn">Bir mezgilde</button>
+    <button class="btn gold" id="playKuiBtn">▶ Kúıdi tyńdaý</button>
+    <button class="btn" id="strumBtn">Qaǵys (Arpejio)</button>
+    <button class="btn" id="chordBtn">Akkord</button>
+  </div>
+
+  <div class="history-card">
+    <h3>Zhetigenniń qasıeti men 7 asyq</h3>
+    <p>
+      Aspaptaǵy ár asyq — qunty tıek. Dástúirde asyqty ońǵa-solǵa nemese joǵary-tómen jylystyp, ishektiń uzyndyǵyn teńshegen. Asyq joǵarylaǵan saıyn dybys jińishkerip (ashyq), tómen túsken saıyn qońyrlana túsken.
+    </p>
+    <div style="font-weight: bold; color: #dfb15b; margin-top: 14px;">7 uldyń zhyry (7 ishek):</div>
+    <ol class="strings-list">
+      <li><b>1-ishek:</b> Qaniia — «Talıqsygan aqbulaq»</li>
+      <li><b>2-ishek:</b> Tolyqbaı — «Kúıik bala»</li>
+      <li><b>3-ishek:</b> Jaılaý — «Qara joryq»</li>
+      <li><b>4-ishek:</b> Qarmaqshy — «Bala búrkiti»</li>
+      <li><b>5-ishek:</b> Qadyr — «Sholaq baqbaq»</li>
+      <li><b>6-ishek:</b> Sátpaı — «Qos kókirek»</li>
+      <li><b>7-ishek:</b> Jańqa — «Qurǵaq aǵash»</li>
+    </ol>
   </div>
 
   <script>
+    // Asyqtar dıagonaldy ornalasady: 1-ishekte tómen (72%), 7-ishekte joǵary (18%)
     const freqs = [
-      { num: 1, note: 'D4', f: 293.66 },
-      { num: 2, note: 'E4', f: 329.63 },
-      { num: 3, note: 'G4', f: 392.00 },
-      { num: 4, note: 'A4', f: 440.00 },
-      { num: 5, note: 'B4', f: 493.88 },
-      { num: 6, note: 'D5', f: 587.33 },
-      { num: 7, note: 'E5', f: 659.25 }
+      { num: 1, note: 'D4', f: 293.66, asyqTop: 72 },
+      { num: 2, note: 'E4', f: 329.63, asyqTop: 63 },
+      { num: 3, note: 'G4', f: 392.00, asyqTop: 54 },
+      { num: 4, note: 'A4', f: 440.00, asyqTop: 45 },
+      { num: 5, note: 'B4', f: 493.88, asyqTop: 36 },
+      { num: 6, note: 'D5', f: 587.33, asyqTop: 27 },
+      { num: 7, note: 'E5', f: 659.25, asyqTop: 18 }
     ];
 
-    // Dástúrli qazaq sazy (ishek nomirleri men ýaqyt kesteі)
     const kuiMelody = [
       { str: 3, delay: 0 },
-      { str: 4, delay: 360 },
-      { str: 5, delay: 360 },
+      { str: 4, delay: 350 },
+      { str: 5, delay: 350 },
       { str: 6, delay: 500 },
       { str: 5, delay: 300 },
       { str: 4, delay: 300 },
       { str: 3, delay: 420 },
       { str: 2, delay: 320 },
-      { str: 1, delay: 600 },
-      // Qaǵys irkilisimen
-      { str: 0, delay: 250 },
-      { str: 1, delay: 70 },
-      { str: 2, delay: 70 },
-      { str: 3, delay: 70 },
-      { str: 4, delay: 70 },
-      { str: 5, delay: 70 },
+      { str: 1, delay: 580 },
+      { str: 0, delay: 240 },
+      { str: 1, delay: 65 },
+      { str: 2, delay: 65 },
+      { str: 3, delay: 65 },
+      { str: 4, delay: 65 },
+      { str: 5, delay: 65 },
       { str: 6, delay: 600 },
-      // Qorytyndy saz
-      { str: 5, delay: 380 },
-      { str: 3, delay: 380 },
-      { str: 4, delay: 450 },
-      { str: 2, delay: 380 },
+      { str: 5, delay: 360 },
+      { str: 3, delay: 360 },
+      { str: 4, delay: 420 },
+      { str: 2, delay: 360 },
       { str: 0, delay: 700 }
     ];
 
@@ -174,16 +263,15 @@
     let dryGainNode = null;
     let wetGainNode = null;
 
-    function buildImpulseResponse(ctx, duration = 2.2, decay = 2.8) {
+    function buildImpulseResponse(ctx) {
       const rate = ctx.sampleRate;
-      const length = Math.floor(rate * duration);
+      const length = Math.floor(rate * 2.2);
       const buffer = ctx.createBuffer(2, length, rate);
       const left = buffer.getChannelData(0);
       const right = buffer.getChannelData(1);
 
       for (let i = 0; i < length; i++) {
-        const n = i / length;
-        const envelope = Math.exp(-n * decay);
+        const envelope = Math.exp(-(i / length) * 2.8);
         left[i] = (Math.random() * 2 - 1) * envelope;
         right[i] = (Math.random() * 2 - 1) * envelope;
       }
@@ -227,8 +315,7 @@
 
       let lastVal = 0;
       for (let i = 0; i < period; i++) {
-        const whiteNoise = Math.random() * 2 - 1;
-        lastVal = (lastVal + whiteNoise) * 0.5;
+        lastVal = (lastVal + (Math.random() * 2 - 1)) * 0.5;
         data[i] = lastVal * 0.8;
       }
 
@@ -253,41 +340,41 @@
     }
 
     const container = document.getElementById('zhetigen');
-    const wrapElements = [];
+    const trackElements = [];
 
+    // Ishekter men asyqtardy ornalastyru
     freqs.forEach((item) => {
-      const wrap = document.createElement('div');
-      wrap.className = 'string-wrap';
+      const track = document.createElement('div');
+      track.className = 'string-track';
 
-      wrap.innerHTML = `
-        <div class="string">
-          <div class="bridge"></div>
-        </div>
-        <div class="string-num">${item.num}</div>
+      track.innerHTML = `
+        <div class="string-line"></div>
+        <div class="asyq" style="top: ${item.asyqTop}%;"></div>
+        <div class="string-note">${item.num}</div>
       `;
 
-      container.appendChild(wrap);
-      wrapElements.push(wrap);
+      container.appendChild(track);
+      trackElements.push(track);
     });
 
     function triggerString(idx) {
       if (idx < 0 || idx >= freqs.length) return;
       playZhetigenString(freqs[idx].f);
-      const wrap = wrapElements[idx];
-      wrap.classList.add('active');
-      setTimeout(() => wrap.classList.remove('active'), 140);
+      const track = trackElements[idx];
+      track.classList.add('active');
+      setTimeout(() => track.classList.remove('active'), 130);
     }
 
-    // Saýsaqpen syzyp shertu (Swipe)
+    // Saýsaqpen syzyp ótý (Swipe / Glissando)
     let isInteracting = false;
     let lastPluckedIndex = -1;
 
     function handlePointerAt(clientX, clientY) {
       const target = document.elementFromPoint(clientX, clientY);
       if (!target) return;
-      const wrap = target.closest('.string-wrap');
-      if (wrap) {
-        const idx = wrapElements.indexOf(wrap);
+      const track = target.closest('.string-track');
+      if (track) {
+        const idx = trackElements.indexOf(track);
         if (idx !== -1 && idx !== lastPluckedIndex) {
           lastPluckedIndex = idx;
           triggerString(idx);
@@ -314,7 +401,7 @@
       lastPluckedIndex = -1;
     });
 
-    // Avtomatty kúı oryndagysh
+    // Avtomatty kúı
     let isPlayingKui = false;
     let kuiTimeouts = [];
 
@@ -323,7 +410,7 @@
       kuiTimeouts = [];
       isPlayingKui = false;
       document.getElementById('playKuiBtn').innerText = '▶ Kúıdi tyńdaý';
-      document.getElementById('statusText').innerText = 'Ishekterdi syzyp shertińiz nemese kúı tyńdańyz';
+      document.getElementById('statusText').innerText = 'Ishekterdi saýsaqpen syzyp shertińiz';
     }
 
     function playKui() {
@@ -337,15 +424,15 @@
       document.getElementById('playKuiBtn').innerText = '⏹ Toqtatý';
       document.getElementById('statusText').innerText = 'Kúı oryndalýda...';
 
-      let cumulativeTime = 0;
+      let cumulative = 0;
       kuiMelody.forEach((step, index) => {
-        cumulativeTime += step.delay;
+        cumulative += step.delay;
         const t = setTimeout(() => {
           triggerString(step.str);
           if (index === kuiMelody.length - 1) {
             setTimeout(stopKui, 1200);
           }
-        }, cumulativeTime);
+        }, cumulative);
         kuiTimeouts.push(t);
       });
     }
